@@ -2,17 +2,20 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 
+# --- Kullanıcı oluşturma ---
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
     full_name: str
 
 
+# --- Giriş (login) ---
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
 
+# --- Kullanıcı genel görünümü ---
 class UserPublic(BaseModel):
     id: int
     email: EmailStr
@@ -22,11 +25,11 @@ class UserPublic(BaseModel):
     hourly_rate: Optional[int] = None
     bio: Optional[str] = None
 
+    class Config:
+        from_attributes = True  # SQLAlchemy -> Pydantic dönüşümü
 
-class Config:
-    from_attributes = True
 
-
+# --- Kullanıcı bilgilerini güncelleme ---
 class UserUpdate(BaseModel):
     full_name: Optional[str] = None
     city: Optional[str] = None
@@ -34,7 +37,11 @@ class UserUpdate(BaseModel):
     hourly_rate: Optional[int] = None
     bio: Optional[str] = None
 
+    class Config:
+        from_attributes = True
 
+
+# --- Token modeli ---
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
